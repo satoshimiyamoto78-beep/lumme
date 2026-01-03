@@ -757,9 +757,152 @@ def unauthorized(error):
 # ИНИЦИАЛИЗАЦИЯ
 # ============================================================================
 
-if __name__ == '__main__':
+def init_db():
+    """Инициализация БД при запуске"""
     with app.app_context():
+        print("🔄 Создание таблиц БД...")
         db.create_all()
-        print("✅ База данных инициализирована")
+        print("✅ Таблицы созданы")
+        
+        # Проверка, есть ли данные
+        if User.query.first() is None:
+            print("📝 Заполнение БД тестовыми данными...")
+            seed_database()
+        else:
+            print("ℹ️ БД уже содержит данные")
+
+
+def seed_database():
+    """Заполнение БД тестовыми данными"""
+    # Создание продавцов
+    sellers_data = [
+        {
+            "email": "florist1@lumme.tj",
+            "password": "password123",
+            "name": "Фарход Цветочный",
+            "phone": "+992 37 227-00-01",
+            "shop_name": "Цветочная лавка №1",
+            "shop_address": "Душанбе, ул. Айни, 45",
+            "shop_description": "Лучший выбор букетов в городе"
+        },
+        {
+            "email": "florist2@lumme.tj",
+            "password": "password123",
+            "name": "Гульнора Розовая",
+            "phone": "+992 37 227-00-02",
+            "shop_name": "Розовая мечта",
+            "shop_address": "Душанбе, ул. Рудаки, 78",
+            "shop_description": "Свежие цветы каждый день"
+        }
+    ]
     
+    sellers = []
+    for seller_data in sellers_data:
+        user = User(
+            email=seller_data["email"],
+            password_hash=generate_password_hash(seller_data["password"]),
+            first_name=seller_data["name"].split()[0],
+            last_name=seller_data["name"].split()[1] if len(seller_data["name"].split()) > 1 else "",
+            phone=seller_data["phone"],
+            user_type="seller"
+        )
+        db.session.add(user)
+        db.session.flush()
+        
+        seller = Seller(
+            user_id=user.id,
+            shop_name=seller_data["shop_name"],
+            shop_address=seller_data["shop_address"],
+            shop_description=seller_data["shop_description"],
+            rating=5.0
+        )
+        db.session.add(seller)
+        sellers.append(seller)
+        print(f"✅ Продавец: {seller_data['name']}")
+    
+    db.session.commit()
+    
+    # Создание товаров
+    products_data = [
+        {"name": "Букет красных роз", "price": 350, "description": "Прекрасный букет из 15 красных роз", "composition": "15 красных роз, зелень", "occasion": "love", "size": "medium"},
+        {"name": "Букет для дня рождения", "price": 280, "description": "Яркий букет с разноцветными цветами", "composition": "Розы, гвоздики, хризантемы", "occasion": "birthday", "size": "large"},
+        {"name": "Свадебный букет", "price": 500, "description": "Элегантный букет для невесты", "composition": "Белые розы, лилии, зелень", "occasion": "wedding", "size": "large"},
+        {"name": "Букет тюльпанов", "price": 250, "description": "Свежие тюльпаны весны", "composition": "25 тюльпанов разных цветов", "occasion": "congratulations", "size": "medium"},
+        {"name": "Букет подсолнухов", "price": 200, "description": "Солнечный букет подсолнухов", "composition": "15 подсолнухов, зелень", "occasion": "congratulations", "size": "small"},
+        {"name": "Букет гвоздик", "price": 180, "description": "Классический букет красных гвоздик", "composition": "20 красных гвоздик", "occasion": "love", "size": "medium"},
+        {"name": "Букет лилий", "price": 320, "description": "Ароматный букет белых лилий", "composition": "10 белых лилий, зелень", "occasion": "anniversary", "size": "medium"},
+        {"name": "Букет орхидей", "price": 400, "description": "Экзотический букет орхидей", "composition": "10 орхидей, зелень", "occasion": "congratulations", "size": "medium"},
+        {"name": "Букет хризантем", "price": 220, "description": "Яркие хризантемы разных цветов", "composition": "30 хризантем, зелень", "occasion": "birthday", "size": "large"},
+        {"name": "Букет пионов", "price": 450, "description": "Роскошный букет розовых пионов", "composition": "15 пионов, зелень", "occasion": "anniversary", "size": "large"},
+        {"name": "Букет смешанный", "price": 300, "description": "Красивый букет из разных цветов", "composition": "Розы, гвоздики, альстромерия, зелень", "occasion": "congratulations", "size": "medium"},
+        {"name": "Букет для юбилея", "price": 380, "description": "Элегантный букет для торжества", "composition": "Розы, лилии, зелень", "occasion": "anniversary", "size": "large"}
+    ]
+    
+    # Изображения для товаров
+    images = [
+        "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=500&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=500&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=500&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=500&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=500&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=500&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1566873535350-a3f5d4a804b7?w=500&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=500&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=500&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=500&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=500&h=500&fit=crop"
+    ]
+    
+    for i, product_data in enumerate(products_data):
+        seller = sellers[i % len(sellers)]
+        product = Product(
+            seller_id=seller.id,
+            name=product_data["name"],
+            price=product_data["price"],
+            description=product_data["description"],
+            composition=product_data["composition"],
+            occasion=product_data["occasion"],
+            size=product_data["size"],
+            is_in_stock=True,
+            rating=4.5,
+            review_count=0,
+            image_url=images[i % len(images)]
+        )
+        db.session.add(product)
+        print(f"✅ Товар: {product_data['name']}")
+    
+    db.session.commit()
+    
+    # Создание покупателей
+    customers_data = [
+        {"email": "customer1@lumme.tj", "password": "password123", "name": "Зарина Покупатель", "phone": "+992 37 227-00-10"},
+        {"email": "customer2@lumme.tj", "password": "password123", "name": "Махмуд Клиент", "phone": "+992 37 227-00-11"}
+    ]
+    
+    for customer_data in customers_data:
+        user = User(
+            email=customer_data["email"],
+            password_hash=generate_password_hash(customer_data["password"]),
+            first_name=customer_data["name"].split()[0],
+            last_name=customer_data["name"].split()[1] if len(customer_data["name"].split()) > 1 else "",
+            phone=customer_data["phone"],
+            user_type="customer"
+        )
+        db.session.add(user)
+        db.session.flush()
+        
+        customer = Customer(user_id=user.id)
+        db.session.add(customer)
+        print(f"✅ Покупатель: {customer_data['name']}")
+    
+    db.session.commit()
+    print("✅ БД заполнена тестовыми данными")
+
+
+# Автоматическая инициализация при запуске через gunicorn
+init_db()
+
+
+if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
