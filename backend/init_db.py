@@ -3,10 +3,13 @@
 Запускается при первом запуске приложения на Railway
 """
 
+import sys
+import os
+sys.path.insert(0, os.path.dirname(__file__))
+
 from app_extended import app, db, User, Seller, Customer, Product, Order, OrderItem, Review, Cart
 from werkzeug.security import generate_password_hash
 from datetime import datetime
-import os
 
 def init_database():
     """Инициализация БД и создание таблиц"""
