@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа - Lumme</title>
+    <style>
+        :root {
+            --primary-dark: #203F9A;
+            --primary-light: #94C2DA;
+            --accent-pink: #E84797;
+            --accent-light-pink: #E7A0CC;
+            --neutral-light: #EFE8E0;
+            --secondary-blue: #4E7CB2;
+            --text-dark: #333333;
+            --text-light: #777777;
+            --bg-light: #FFFFFF;
+            --bg-very-light: #F9F7F5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-very-light);
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--bg-light);
+            border-bottom: 1px solid #f0f0f0;
+            padding: 20px 0;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--accent-pink) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .back-link {
+            color: var(--accent-pink);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .checkout-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+
+        .checkout-form {
+            background-color: var(--bg-light);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            color: var(--primary-dark);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-pink);
+            box-shadow: 0 0 0 3px rgba(232, 71, 151, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .payment-option {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .payment-option.selected {
+            border-color: var(--accent-pink);
+            background-color: rgba(232, 71, 151, 0.1);
+        }
+
+        .payment-option input[type="radio"] {
+            display: none;
+        }
+
+        .payment-option label {
+            cursor: pointer;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .order-summary {
+            background-color: var(--bg-light);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .summary-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 13px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .summary-item:last-of-type {
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .summary-total .price {
+            background: linear-gradient(135deg, var(--accent-pink) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--accent-pink) 0%, #d1608a 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .place-order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(232, 71, 151, 0.3);
+        }
+
+        .success-message {
+            background-color: #efe;
+            color: #3c3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3c3;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">🌸 Lumme</div>
+                <a class="back-link" href="cart.html">← Вернуться в корзину</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Оформление заказа</h1>
+
+        <div class="checkout-layout">
+            <!-- ФОРМА ЗАКАЗА -->
+            <div class="checkout-form">
+                <form id="checkoutForm" onsubmit="submitOrder(event)">
+
+                    <!-- ИНФОРМАЦИЯ О ПОЛУЧАТЕЛЕ -->
+                    <div class="form-section">
+                        <div class="section-title">📋 Информация о получателе</div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Имя получателя</label>
+                                <input type="text" id="recipientName" placeholder="Имя" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Телефон получателя</label>
+                                <input type="tel" id="recipientPhone" placeholder="+992 (XX) XXX-XX-XX" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- АДРЕС ДОСТАВКИ -->
+                    <div class="form-section">
+                        <div class="section-title">📍 Адрес доставки</div>
+
+                        <div class="form-row full">
+                            <div class="form-group">
+                                <label>Полный адрес</label>
+                                <input type="text" id="deliveryAddress" placeholder="Улица, дом, квартира, город" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Дата доставки</label>
+                                <input type="date" id="deliveryDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Время доставки</label>
+                                <select id="deliveryTime" required>
+                                    <option value="">Выберите время</option>
+                                    <option value="09:00-12:00">09:00 - 12:00</option>
+                                    <option value="12:00-15:00">12:00 - 15:00</option>
+                                    <option value="15:00-18:00">15:00 - 18:00</option>
+                                    <option value="18:00-21:00">18:00 - 21:00</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ПЕРСОНАЛЬНОЕ СООБЩЕНИЕ -->
+                    <div class="form-section">
+                        <div class="section-title">💌 Персональное сообщение</div>
+
+                        <div class="form-row full">
+                            <div class="form-group">
+                                <label>Текст поздравления (опционально)</label>
+                                <textarea id="personalMessage" placeholder="Напишите личное сообщение для получателя..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-row full">
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="videoGreeting"> Добавить видео-поздравление (50 сомони)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- СПОСОБ ОПЛАТЫ -->
+                    <div class="form-section">
+                        <div class="section-title">💳 Способ оплаты</div>
+
+                        <div class="payment-methods">
+                            <div class="payment-option selected">
+                                <input type="radio" name="payment" value="cash" id="payment-cash" checked>
+                                <label for="payment-cash">💵 Наличные при доставке</label>
+                            </div>
+                            <div class="payment-option">
+                                <input type="radio" name="payment" value="card" id="payment-card">
+                                <label for="payment-card">💳 Банковская карта</label>
+                            </div>
+                        </div>
+
+                        <div id="cardPaymentFields" style="display: none; margin-top: 15px;">
+                            <div class="form-row full">
+                                <div class="form-group">
+                                    <label>Номер карты</label>
+                                    <input type="text" placeholder="1234 5678 9012 3456">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Срок действия</label>
+                                    <input type="text" placeholder="MM/YY">
+                                </div>
+                                <div class="form-group">
+                                    <label>CVV</label>
+                                    <input type="text" placeholder="123">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="place-order-btn">Подтвердить заказ</button>
+
+                </form>
+            </div>
+
+            <!-- ИТОГОВАЯ СУММА -->
+            <div class="order-summary">
+                <div class="summary-title">Ваш заказ</div>
+
+                <div id="orderItems"></div>
+
+                <div class="summary-total">
+                    <span>Итого:</span>
+                    <span class="price" id="orderTotal">0 сомони</span>
+                </div>
+
+                <div style="background-color: var(--bg-very-light); padding: 12px; border-radius: 8px; font-size: 12px; color: var(--text-light);">
+                    ✓ Свежие цветы гарантированы<br>
+                    ✓ Быстрая доставка<br>
+                    ✓ Профессиональная упаковка
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Установка минимальной даты доставки (завтра)
+        function setMinDeliveryDate() {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const dateString = tomorrow.toISOString().split('T')[0];
+            document.getElementById('deliveryDate').min = dateString;
+            document.getElementById('deliveryDate').value = dateString;
+        }
+
+        // Переключение способов оплаты
+        document.querySelectorAll('input[name="payment"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const cardFields = document.getElementById('cardPaymentFields');
+                if (this.value === 'card') {
+                    cardFields.style.display = 'block';
+                } else {
+                    cardFields.style.display = 'none';
+                }
+
+                // Обновление выбранного способа оплаты
+                document.querySelectorAll('.payment-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.closest('.payment-option').classList.add('selected');
+            });
+        });
+
+        // Загрузка корзины в итоговую сумму
+        function loadOrderSummary() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const itemsDiv = document.getElementById('orderItems');
+
+            let total = 0;
+            itemsDiv.innerHTML = cart.map(item => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+                return `
+                    <div class="summary-item">
+                        <span>${item.name} (x${item.quantity})</span>
+                        <span>${subtotal.toFixed(0)} сомони</span>
+                    </div>
+                `;
+            }).join('');
+
+            const delivery = 50;
+            const videoGreeting = document.getElementById('videoGreeting').checked ? 50 : 0;
+            const finalTotal = total + delivery + videoGreeting;
+
+            itemsDiv.innerHTML += `
+                <div class="summary-item" style="border-bottom: none; padding-bottom: 0;">
+                    <span>Доставка</span>
+                    <span>${delivery} сомони</span>
+                </div>
+            `;
+
+            if (videoGreeting > 0) {
+                itemsDiv.innerHTML += `
+                    <div class="summary-item" style="border-bottom: none; padding-bottom: 0;">
+                        <span>Видео-поздравление</span>
+                        <span>${videoGreeting} сомони</span>
+                    </div>
+                `;
+            }
+
+            document.getElementById('orderTotal').textContent = finalTotal.toFixed(0) + ' сомони';
+        }
+
+        // Обновление при изменении видео-поздравления
+        document.getElementById('videoGreeting').addEventListener('change', loadOrderSummary);
+
+        // Отправка заказа
+        async function submitOrder(event) {
+            event.preventDefault();
+
+            const orderData = {
+                recipient_name: document.getElementById('recipientName').value,
+                recipient_phone: document.getElementById('recipientPhone').value,
+                delivery_address: document.getElementById('deliveryAddress').value,
+                delivery_date: document.getElementById('deliveryDate').value,
+                delivery_time: document.getElementById('deliveryTime').value,
+                personal_message: document.getElementById('personalMessage').value,
+                payment_method: document.querySelector('input[name="payment"]:checked').value,
+                video_greeting: document.getElementById('videoGreeting').checked,
+                items: JSON.parse(localStorage.getItem('cart')) || []
+            };
+
+            try {
+                const response = await fetch('http://localhost:5000/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + (localStorage.getItem('token') || '')
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.removeItem('cart');
+                    alert('Заказ успешно оформлен! Номер заказа: ' + data.order_number);
+                    window.location.href = 'order-confirmation.html?order=' + data.order_number;
+                } else {
+                    alert('Ошибка: ' + (data.error || 'Не удалось оформить заказ'));
+                }
+            } catch (error) {
+                alert('Ошибка подключения: ' + error.message);
+                console.error('Error:', error);
+            }
+        }
+
+        // Инициализация
+        window.addEventListener('load', () => {
+            setMinDeliveryDate();
+            loadOrderSummary();
+        });
+    </script>
+
+</body>
+</html>
