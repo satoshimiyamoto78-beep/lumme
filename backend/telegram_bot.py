@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 # Конфигурация
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '8383182287:AAFqF8uDYESA0FVCkW7_-QKYvp4Argd3YqA')
 WEB_APP_URL = os.getenv('WEB_APP_URL', 'https://lumme-marketplace.netlify.app')
-API_URL = os.getenv('API_URL', 'https://lumme-api-production.up.railway.app')
+API_URL = os.getenv('API_URL', 'https://lumme-production.up.railway.app/api')
 
 # ============================================================================
 # КОМАНДЫ БОТА
