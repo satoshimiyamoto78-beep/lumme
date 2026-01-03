@@ -3,7 +3,7 @@ Lumme - Маркетплейс цветов
 Расширенное приложение Flask с полным API
 """
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template, send_from_directory
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
@@ -18,7 +18,10 @@ from functools import wraps
 load_dotenv()
 
 # Инициализация Flask приложения
-app = Flask(__name__)
+app = Flask(__name__, 
+            template_folder='templates',
+            static_folder='static',
+            static_url_path='/static')
 
 # Конфигурация
 # Railway автоматически предоставляет DATABASE_URL
@@ -701,6 +704,34 @@ def health_check():
         'version': '1.0.0',
         'timestamp': datetime.now().isoformat()
     }), 200
+
+
+# ============================================================================
+# МАРШРУТЫ СТРАНИЦ (ФРОНТЕНД)
+# ============================================================================
+
+@app.route('/')
+def index():
+    """Главная страница"""
+    return render_template('index.html')
+
+
+@app.route('/auth')
+def auth():
+    """Страница входа и регистрации"""
+    return render_template('auth.html')
+
+
+@app.route('/cart')
+def cart():
+    """Страница корзины"""
+    return render_template('cart.html')
+
+
+@app.route('/checkout')
+def checkout():
+    """Страница оформления заказа"""
+    return render_template('checkout.html')
 
 
 # ============================================================================

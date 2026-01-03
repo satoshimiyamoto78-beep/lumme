@@ -201,7 +201,7 @@ def init_database():
                 composition=product_data["composition"],
                 occasion=product_data["occasion"],
                 size=product_data["size"],
-                in_stock=product_data["in_stock"],
+                is_in_stock=product_data["in_stock"],
                 rating=4.5,
                 review_count=0
             )

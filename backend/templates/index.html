@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumme - Маркетплейс цветов</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        /* ========== ЦВЕТОВАЯ ПАЛИТРА LUMME ========== */
+        :root {
+            --primary-dark: #203F9A;      /* Ярко синий */
+            --primary-light: #94C2DA;     /* Пастельный голубой */
+            --accent-pink: #E84797;       /* Ярко розовый */
+            --accent-light-pink: #E7A0CC; /* Пастельный розовый */
+            --neutral-light: #EFE8E0;     /* Светлый бежевый */
+            --secondary-blue: #4E7CB2;    /* Пастельный синий */
+            
+            --text-dark: #333333;
+            --text-light: #777777;
+            --bg-light: #FFFFFF;
+            --bg-very-light: #F9F7F5;
+        }
+
+        /* ========== ОБЩИЕ СТИЛИ ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-very-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ========== ШАПКА САЙТА ========== */
+        header {
+            background-color: var(--bg-light);
+            border-bottom: 1px solid #f0f0f0;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--accent-pink) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-pink);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .cart-icon {
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .cart-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-blue) 100%);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(32, 63, 154, 0.3);
+        }
+
+        /* ========== СЕКЦИЯ ГЕРОЙ ========== */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            padding: 80px 0;
+        }
+
+        .hero-text h1 {
+            font-size: 52px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .hero-text h1 span {
+            background: linear-gradient(135deg, var(--accent-pink) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text p {
+            font-size: 18px;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-pink) 0%, #d1608a 100%);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(232, 71, 151, 0.3);
+        }
+
+        .hero-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 20px;
+        }
+
+        /* ========== СЕКЦИЯ КАТАЛОГА ========== */
+        .catalog-section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: var(--text-light);
+        }
+
+        /* ========== ФИЛЬТРЫ ========== */
+        .filters {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            background-color: var(--bg-light);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: var(--accent-pink);
+            box-shadow: 0 0 0 3px rgba(232, 71, 151, 0.1);
+        }
+
+        /* ========== СЕТКА ТОВАРОВ ========== */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .product-card {
+            background-color: var(--bg-light);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-light-pink) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: var(--accent-pink);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .product-info {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .product-description {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            flex-grow: 1;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .product-rating {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .star {
+            color: #FFD700;
+            font-size: 14px;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .product-price {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-pink) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .add-to-cart-btn {
+            background-color: var(--primary-dark);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: var(--secondary-blue);
+        }
+
+        /* ========== ПОДВАЛ ========== */
+        footer {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-blue) 100%);
+            color: white;
+            padding: 60px 0 20px;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .footer-section a {
+            display: block;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* ========== АДАПТИВНОСТЬ ========== */
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 40px 0;
+            }
+
+            .hero-text h1 {
+                font-size: 36px;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 20px;
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+        }
+
+        /* ========== ЗАГРУЗКА ========== */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+            color: var(--text-light);
+        }
+
+        .spinner {
+            border: 4px solid var(--primary-light);
+            border-top: 4px solid var(--accent-pink);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== ШАПКА ========== -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">🌸 Lumme</div>
+                <nav>
+                    <a href="#catalog">Каталог</a>
+                    <a href="#about">О нас</a>
+                    <a href="#contact">Контакты</a>
+                </nav>
+                <div class="header-actions">
+                    <span class="cart-icon" onclick="toggleCart()">🛒</span>
+                    <button class="login-btn" onclick="openLogin()">Войти</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========== ГЕРОЙ СЕКЦИЯ ========== -->
+    <section class="hero">
+        <div class="container" style="grid-column: 1;">
+            <div class="hero-text">
+                <h1>Красивые букеты от лучших <span>флористов</span> Таджикистана</h1>
+                <p>Найдите идеальный букет для любого повода. Быстрая доставка, свежие цветы и персональное обслуживание.</p>
+                <button class="cta-button" onclick="scrollToCatalog()">Смотреть каталог →</button>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=500&h=500&fit=crop" alt="Красивый букет роз">
+        </div>
+    </section>
+
+    <!-- ========== КАТАЛОГ ТОВАРОВ ========== -->
+    <section class="catalog-section" id="catalog">
+        <div class="container">
+            <div class="section-header">
+                <h2>Популярные букеты</h2>
+                <p>Выберите идеальный букет для вашего особого момента</p>
+            </div>
+
+            <!-- ФИЛЬТРЫ -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Повод:</label>
+                    <select id="occasionFilter" onchange="filterProducts()">
+                        <option value="">Все</option>
+                        <option value="birthday">День рождения</option>
+                        <option value="wedding">Свадьба</option>
+                        <option value="anniversary">Юбилей</option>
+                        <option value="congratulations">Поздравление</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Размер:</label>
+                    <select id="sizeFilter" onchange="filterProducts()">
+                        <option value="">Все</option>
+                        <option value="small">Маленький</option>
+                        <option value="medium">Средний</option>
+                        <option value="large">Большой</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Цена:</label>
+                    <input type="number" id="minPrice" placeholder="От" onchange="filterProducts()" style="width: 80px;">
+                    <input type="number" id="maxPrice" placeholder="До" onchange="filterProducts()" style="width: 80px;">
+                </div>
+            </div>
+
+            <!-- СЕТКА ТОВАРОВ -->
+            <div id="productGrid" class="product-grid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Загрузка товаров...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== ПОДВАЛ ========== -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>О Lumme</h3>
+                    <a href="#">О компании</a>
+                    <a href="#">Наша миссия</a>
+                    <a href="#">Блог</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Для покупателей</h3>
+                    <a href="#">Как заказать</a>
+                    <a href="#">Доставка</a>
+                    <a href="#">Возврат</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Для продавцов</h3>
+                    <a href="#">Присоединиться</a>
+                    <a href="#">Условия</a>
+                    <a href="#">Поддержка</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <a href="tel:+992">+992 (37) 227-00-00</a>
+                    <a href="mailto:info@lumme.tj">info@lumme.tj</a>
+                    <a href="#">Telegram</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Lumme. Все права защищены. | <a href="#" style="color: rgba(255,255,255,0.8);">Политика конфиденциальности</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script>
+        // Инициализация Telegram Web App
+        window.Telegram.WebApp.ready();
+        const tg = window.Telegram.WebApp;
+
+        // Получение данных пользователя из Telegram
+        const user = tg.initDataUnsafe.user;
+        if (user) {
+            console.log('Пользователь Telegram:', user);
+        }
+
+        // Загрузка товаров с API
+        async function loadProducts() {
+            try {
+                const response = await fetch('/api/products');
+                const data = await response.json();
+
+                if (data.success) {
+                    displayProducts(data.data);
+                } else {
+                    showError('Ошибка загрузки товаров');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                showError('Не удалось подключиться к серверу');
+            }
+        }
+
+        // Отображение товаров
+        function displayProducts(products) {
+            const grid = document.getElementById('productGrid');
+            
+            if (products.length === 0) {
+                grid.innerHTML = '<div class="loading"><p>Товары не найдены</p></div>';
+                return;
+            }
+
+            grid.innerHTML = products.map(product => `
+                <div class="product-card" onclick="viewProduct(${product.id})">
+                    <div class="product-image">
+                        <img src="${product.image_url || 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=500&h=500&fit=crop'}" alt="${product.name}">
+                        <span class="product-badge">${product.size}</span>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-description">${product.description || 'Красивый букет'}</div>
+                        <div class="product-meta">
+                            <div class="product-rating">
+                                <span class="star">★</span>
+                                <span>${product.rating.toFixed(1)}</span>
+                                <span>(${product.review_count})</span>
+                            </div>
+                            <span>${product.seller.shop_name}</span>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price">${product.price} сомони</div>
+                            <button class="add-to-cart-btn" onclick="addToCart(event, ${JSON.stringify(product).replace(/"/g, '&quot;')})">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Фильтрация товаров
+        function filterProducts() {
+            const occasion = document.getElementById('occasionFilter').value;
+            const size = document.getElementById('sizeFilter').value;
+            const minPrice = document.getElementById('minPrice').value;
+            const maxPrice = document.getElementById('maxPrice').value;
+
+            let url = '/api/products?';
+            if (occasion) url += `occasion=${occasion}&`;
+            if (size) url += `size=${size}&`;
+            if (minPrice) url += `min_price=${minPrice}&`;
+            if (maxPrice) url += `max_price=${maxPrice}`;
+
+            fetch(url)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) displayProducts(data.data);
+                })
+                .catch(e => console.error(e));
+        }
+
+        // Добавление в корзину
+        function addToCart(event, product) {
+            event.stopPropagation();
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItem = cart.find(item => item.id === product.id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image_url || 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=500&h=500&fit=crop',
+                    size: product.size,
+                    seller: product.seller.shop_name,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert('Товар добавлен в корзину!');
+        }
+
+        // Просмотр товара
+        function viewProduct(productId) {
+            alert(`Открыть товар ${productId}`);
+            // TODO: Открыть страницу товара
+        }
+
+        // Переключение корзины
+        function toggleCart() {
+            window.location.href = '/cart';
+        }
+
+        // Открытие входа
+        function openLogin() {
+            window.location.href = '/auth';
+        }
+
+        // Прокрутка к каталогу
+        function scrollToCatalog() {
+            document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Показ ошибки
+        function showError(message) {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = `<div class="loading"><p style="color: red;">${message}</p></div>`;
+        }
+
+        // Загрузка товаров при загрузке страницы
+        window.addEventListener('load', loadProducts);
+    </script>
+
+</body>
+</html>
