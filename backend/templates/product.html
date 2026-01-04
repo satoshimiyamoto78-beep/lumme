@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Товар - Lumme</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E84797;
+            --primary-dark: #C73A7E;
+            --secondary: #203F9A;
+            --accent: #FFB6C1;
+            --text-dark: #1a1a2e;
+            --text-light: #6b7280;
+            --bg-light: #fafafa;
+            --bg-white: #ffffff;
+            --gradient-pink: linear-gradient(135deg, #E84797 0%, #FFB6C1 100%);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--bg-white);
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--gradient-pink);
+            border: none;
+            color: white;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 100px 2rem 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb a {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb span {
+            color: var(--text-dark);
+        }
+
+        /* Product Section */
+        .product-section {
+            padding: 20px 2rem 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        /* Product Gallery */
+        .product-gallery {
+            position: sticky;
+            top: 100px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 500px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 1rem;
+        }
+
+        .main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .thumbnail {
+            height: 100px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .thumbnail:hover,
+        .thumbnail.active {
+            border-color: var(--primary);
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Product Info */
+        .product-info {
+            padding: 1rem 0;
+        }
+
+        .product-badges {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-new {
+            background: var(--accent);
+            color: var(--primary-dark);
+        }
+
+        .badge-sale {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .product-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stars {
+            color: #fbbf24;
+            font-size: 1.25rem;
+        }
+
+        .rating-count {
+            color: var(--text-light);
+        }
+
+        .product-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .product-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-light);
+        }
+
+        .product-description {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Product Options */
+        .product-options {
+            margin-bottom: 2rem;
+        }
+
+        .option-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .option-label {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .size-options {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .size-option {
+            padding: 1rem 1.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .size-option:hover,
+        .size-option.active {
+            border-color: var(--primary);
+            background: var(--accent);
+        }
+
+        .size-option .size-name {
+            font-weight: 600;
+            display: block;
+        }
+
+        .size-option .size-price {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* Quantity */
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: var(--radius-sm);
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quantity-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            border: none;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .add-to-cart-btn {
+            flex: 1;
+            padding: 1.25rem 2rem;
+            background: var(--gradient-pink);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .favorite-btn {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: var(--radius-sm);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .favorite-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Seller Info */
+        .seller-card {
+            background: var(--bg-white);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .seller-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient-pink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .seller-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .seller-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .seller-rating {
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .seller-rating .stars {
+            font-size: 1rem;
+        }
+
+        /* Product Details */
+        .product-details {
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .details-tabs {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .tab-btn {
+            padding: 1rem 0;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .specs-table tr {
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .specs-table td {
+            padding: 1rem;
+        }
+
+        .specs-table td:first-child {
+            font-weight: 600;
+            width: 200px;
+        }
+
+        /* Related Products */
+        .related-section {
+            padding: 80px 2rem;
+            background: var(--bg-white);
+        }
+
+        .related-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .related-card {
+            background: var(--bg-light);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .related-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .related-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .related-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .related-info {
+            padding: 1rem;
+        }
+
+        .related-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .related-price {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 60px 2rem 30px;
+        }
+
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .footer-brand p {
+            color: #9ca3af;
+        }
+
+        .footer-column h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-column a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 40px auto 0;
+            padding-top: 30px;
+            border-top: 1px solid #374151;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-gallery {
+                position: static;
+            }
+
+            .related-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .product-title {
+                font-size: 1.75rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .favorite-btn {
+                width: 100%;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                🌸 Lumme
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Главная</a></li>
+                <li><a href="/catalog">Каталог</a></li>
+                <li><a href="/about">О нас</a></li>
+                <li><a href="/contacts">Контакты</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="/cart" class="nav-btn btn-outline">🛒 Корзина</a>
+                <a href="/auth" class="nav-btn btn-primary">Войти</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="/">Главная</a> / <a href="/catalog">Каталог</a> / <span id="productBreadcrumb">Загрузка...</span>
+    </div>
+
+    <!-- Product Section -->
+    <section class="product-section">
+        <div class="product-grid">
+            <!-- Product Gallery -->
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img id="mainImage" src="/static/images/hero-bouquet.jpg" alt="Товар">
+                </div>
+                <div class="thumbnail-grid" id="thumbnails">
+                    <!-- Thumbnails will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-info">
+                <div class="product-badges">
+                    <span class="badge badge-new">Новинка</span>
+                </div>
+
+                <h1 class="product-title" id="productTitle">Загрузка...</h1>
+
+                <div class="product-rating">
+                    <span class="stars" id="productStars">⭐⭐⭐⭐⭐</span>
+                    <span id="productRating">5.0</span>
+                    <span class="rating-count" id="productReviews">(0 отзывов)</span>
+                </div>
+
+                <div class="product-price">
+                    <span id="productPrice">0</span> <span>сомони</span>
+                </div>
+
+                <p class="product-description" id="productDescription">
+                    Загрузка описания...
+                </p>
+
+                <div class="product-options">
+                    <div class="option-group">
+                        <span class="option-label">Размер</span>
+                        <div class="size-options">
+                            <div class="size-option active" onclick="selectSize(this, 'small')">
+                                <span class="size-name">Маленький</span>
+                                <span class="size-price">от 150 с.</span>
+                            </div>
+                            <div class="size-option" onclick="selectSize(this, 'medium')">
+                                <span class="size-name">Средний</span>
+                                <span class="size-price">от 250 с.</span>
+                            </div>
+                            <div class="size-option" onclick="selectSize(this, 'large')">
+                                <span class="size-name">Большой</span>
+                                <span class="size-price">от 400 с.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="option-group">
+                        <span class="option-label">Количество</span>
+                        <div class="quantity-selector">
+                            <button class="quantity-btn" onclick="changeQuantity(-1)">−</button>
+                            <input type="text" class="quantity-input" id="quantity" value="1" readonly>
+                            <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="add-to-cart-btn" onclick="addToCart()">
+                        🛒 Добавить в корзину
+                    </button>
+                    <button class="favorite-btn" onclick="toggleFavorite()">
+                        ♡
+                    </button>
+                </div>
+
+                <div class="seller-card">
+                    <div class="seller-avatar" id="sellerAvatar">🌸</div>
+                    <div class="seller-info">
+                        <h4 id="sellerName">Загрузка...</h4>
+                        <p id="sellerProducts">0 товаров</p>
+                    </div>
+                    <div class="seller-rating">
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                        <p id="sellerRating">5.0</p>
+                    </div>
+                </div>
+
+                <!-- Product Details Tabs -->
+                <div class="product-details">
+                    <div class="details-tabs">
+                        <button class="tab-btn active" onclick="showTab('description')">Описание</button>
+                        <button class="tab-btn" onclick="showTab('specs')">Характеристики</button>
+                        <button class="tab-btn" onclick="showTab('delivery')">Доставка</button>
+                    </div>
+
+                    <div id="description-tab" class="tab-content active">
+                        <p id="fullDescription">Загрузка описания...</p>
+                    </div>
+
+                    <div id="specs-tab" class="tab-content">
+                        <table class="specs-table">
+                            <tr>
+                                <td>Состав</td>
+                                <td id="specComposition">—</td>
+                            </tr>
+                            <tr>
+                                <td>Размер</td>
+                                <td id="specSize">—</td>
+                            </tr>
+                            <tr>
+                                <td>Упаковка</td>
+                                <td id="specPackaging">Крафт-бумага</td>
+                            </tr>
+                            <tr>
+                                <td>Срок свежести</td>
+                                <td>7-10 дней</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div id="delivery-tab" class="tab-content">
+                        <p>Доставка осуществляется в течение 2-4 часов по Душанбе.</p>
+                        <p style="margin-top: 1rem;"><strong>Стоимость доставки:</strong> 50 сомони</p>
+                        <p><strong>Бесплатная доставка:</strong> при заказе от 500 сомони</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products -->
+    <section class="related-section">
+        <div class="related-container">
+            <h2 class="section-title">Похожие букеты</h2>
+            <div class="related-grid" id="relatedProducts">
+                <!-- Related products will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>🌸 Lumme</h3>
+                <p>Маркетплейс цветов Таджикистана. Свежие букеты от лучших флористов с доставкой по всей стране.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Покупателям</h4>
+                <ul>
+                    <li><a href="/catalog">Каталог</a></li>
+                    <li><a href="/about">О нас</a></li>
+                    <li><a href="/delivery">Доставка</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Продавцам</h4>
+                <ul>
+                    <li><a href="/auth">Стать продавцом</a></li>
+                    <li><a href="/seller-guide">Руководство</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Контакты</h4>
+                <ul>
+                    <li><a href="tel:+992372270000">+992 (37) 227-00-00</a></li>
+                    <li><a href="mailto:info@lumme.tj">info@lumme.tj</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Lumme. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentProduct = null;
+        let selectedSize = 'small';
+        let quantity = 1;
+
+        // Get product ID from URL
+        const productId = window.location.pathname.split('/').pop();
+
+        // Load product on page load
+        document.addEventListener('DOMContentLoaded', loadProduct);
+
+        async function loadProduct() {
+            try {
+                const response = await fetch(`/api/products/${productId}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    currentProduct = data.data;
+                    displayProduct(currentProduct);
+                    loadRelatedProducts();
+                } else {
+                    alert('Товар не найден');
+                    window.location.href = '/catalog';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Ошибка загрузки товара');
+            }
+        }
+
+        function displayProduct(product) {
+            document.title = `${product.name} - Lumme`;
+            document.getElementById('productBreadcrumb').textContent = product.name;
+            document.getElementById('productTitle').textContent = product.name;
+            document.getElementById('productPrice').textContent = product.price;
+            document.getElementById('productDescription').textContent = product.description || 'Красивый букет от лучших флористов';
+            document.getElementById('fullDescription').textContent = product.description || 'Красивый букет от лучших флористов. Идеально подойдет для любого праздника.';
+            document.getElementById('productRating').textContent = product.rating.toFixed(1);
+            document.getElementById('productReviews').textContent = `(${product.review_count} отзывов)`;
+
+            // Main image
+            document.getElementById('mainImage').src = product.image_url || '/static/images/hero-bouquet.jpg';
+
+            // Seller info
+            if (product.seller) {
+                document.getElementById('sellerName').textContent = product.seller.shop_name;
+                document.getElementById('sellerAvatar').textContent = product.seller.shop_name.charAt(0);
+            }
+
+            // Specs
+            document.getElementById('specComposition').textContent = product.composition || 'Розы, зелень';
+            document.getElementById('specSize').textContent = getSizeLabel(product.size);
+        }
+
+        function getSizeLabel(size) {
+            const labels = {
+                'small': 'Маленький (25-30 см)',
+                'medium': 'Средний (35-45 см)',
+                'large': 'Большой (50-60 см)'
+            };
+            return labels[size] || size;
+        }
+
+        function selectSize(element, size) {
+            document.querySelectorAll('.size-option').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            selectedSize = size;
+        }
+
+        function changeQuantity(delta) {
+            quantity = Math.max(1, quantity + delta);
+            document.getElementById('quantity').value = quantity;
+        }
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
+        function addToCart() {
+            if (!currentProduct) return;
+
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItem = cart.find(item => item.id === currentProduct.id && item.size === selectedSize);
+
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    id: currentProduct.id,
+                    name: currentProduct.name,
+                    price: currentProduct.price,
+                    image: currentProduct.image_url || '/static/images/hero-bouquet.jpg',
+                    size: selectedSize,
+                    seller: currentProduct.seller?.shop_name || 'Lumme',
+                    quantity: quantity
+                });
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert('Товар добавлен в корзину!');
+        }
+
+        function toggleFavorite() {
+            alert('Добавлено в избранное!');
+        }
+
+        async function loadRelatedProducts() {
+            try {
+                const response = await fetch('/api/products?limit=4');
+                const data = await response.json();
+
+                if (data.success) {
+                    const related = data.data.filter(p => p.id !== currentProduct.id).slice(0, 4);
+                    displayRelatedProducts(related);
+                }
+            } catch (error) {
+                console.error('Error loading related products:', error);
+            }
+        }
+
+        function displayRelatedProducts(products) {
+            const grid = document.getElementById('relatedProducts');
+            grid.innerHTML = products.map(product => `
+                <a href="/product/${product.id}" class="related-card">
+                    <div class="related-image">
+                        <img src="${product.image_url || '/static/images/hero-bouquet.jpg'}" alt="${product.name}">
+                    </div>
+                    <div class="related-info">
+                        <div class="related-name">${product.name}</div>
+                        <div class="related-price">${product.price} сомони</div>
+                    </div>
+                </a>
+            `).join('');
+        }
+    </script>
+
+</body>
+</html>

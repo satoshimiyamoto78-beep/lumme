@@ -734,6 +734,36 @@ def checkout():
     return render_template('checkout.html')
 
 
+@app.route('/about')
+def about():
+    """Страница О нас"""
+    return render_template('about.html')
+
+
+@app.route('/catalog')
+def catalog():
+    """Страница каталога"""
+    return render_template('catalog.html')
+
+
+@app.route('/contacts')
+def contacts():
+    """Страница контактов"""
+    return render_template('contacts.html')
+
+
+@app.route('/profile')
+def profile():
+    """Страница профиля"""
+    return render_template('profile.html')
+
+
+@app.route('/product/<int:product_id>')
+def product_page(product_id):
+    """Страница товара"""
+    return render_template('product.html')
+
+
 # ============================================================================
 # ОБРАБОТЧИКИ ОШИБОК
 # ============================================================================

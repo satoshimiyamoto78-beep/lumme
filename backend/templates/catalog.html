@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог букетов - Lumme</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E84797;
+            --primary-dark: #C73A7E;
+            --secondary: #203F9A;
+            --accent: #FFB6C1;
+            --text-dark: #1a1a2e;
+            --text-light: #6b7280;
+            --bg-light: #fafafa;
+            --bg-white: #ffffff;
+            --gradient-pink: linear-gradient(135deg, #E84797 0%, #FFB6C1 100%);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--bg-white);
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--gradient-pink);
+            border: none;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 80px;
+            display: flex;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Filters */
+        .sidebar {
+            width: 280px;
+            padding: 2rem;
+            background: var(--bg-white);
+            height: calc(100vh - 80px);
+            position: sticky;
+            top: 80px;
+            overflow-y: auto;
+            border-right: 1px solid #e5e7eb;
+        }
+
+        .filter-section {
+            margin-bottom: 2rem;
+        }
+
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .filter-option input[type="checkbox"],
+        .filter-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .filter-option label {
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .filter-option:hover label {
+            color: var(--text-dark);
+        }
+
+        .price-inputs {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .price-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+        }
+
+        .price-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .apply-filters-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gradient-pink);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+
+        .apply-filters-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .clear-filters {
+            width: 100%;
+            padding: 0.75rem;
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .clear-filters:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Products Grid */
+        .products-section {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .products-count {
+            color: var(--text-light);
+        }
+
+        .sort-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .product-image {
+            position: relative;
+            height: 280px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .product-favorite {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .product-favorite:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .product-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: #fbbf24;
+        }
+
+        .product-seller {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .product-price span {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--text-light);
+        }
+
+        .add-to-cart {
+            padding: 0.75rem 1.25rem;
+            background: var(--gradient-pink);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart:hover {
+            transform: scale(1.05);
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-light);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e5e7eb;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+        }
+
+        .empty-state img {
+            width: 200px;
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                display: none;
+            }
+
+            .products-section {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .product-image {
+                height: 200px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                🌸 Lumme
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Главная</a></li>
+                <li><a href="/catalog" class="active">Каталог</a></li>
+                <li><a href="/about">О нас</a></li>
+                <li><a href="/contacts">Контакты</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="/cart" class="nav-btn btn-outline">🛒 Корзина</a>
+                <a href="/auth" class="nav-btn btn-primary">Войти</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Sidebar Filters -->
+        <aside class="sidebar">
+            <div class="filter-section">
+                <h3 class="filter-title">Повод</h3>
+                <div class="filter-options">
+                    <div class="filter-option">
+                        <input type="checkbox" id="occasion-birthday" value="birthday">
+                        <label for="occasion-birthday">День рождения</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="occasion-wedding" value="wedding">
+                        <label for="occasion-wedding">Свадьба</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="occasion-anniversary" value="anniversary">
+                        <label for="occasion-anniversary">Юбилей</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="occasion-love" value="love">
+                        <label for="occasion-love">Признание в любви</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="occasion-congratulations" value="congratulations">
+                        <label for="occasion-congratulations">Поздравление</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3 class="filter-title">Размер</h3>
+                <div class="filter-options">
+                    <div class="filter-option">
+                        <input type="checkbox" id="size-small" value="small">
+                        <label for="size-small">Маленький</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="size-medium" value="medium">
+                        <label for="size-medium">Средний</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="size-large" value="large">
+                        <label for="size-large">Большой</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3 class="filter-title">Цена (сомони)</h3>
+                <div class="price-inputs">
+                    <input type="number" class="price-input" id="minPrice" placeholder="От">
+                    <span>—</span>
+                    <input type="number" class="price-input" id="maxPrice" placeholder="До">
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3 class="filter-title">Рейтинг</h3>
+                <div class="filter-options">
+                    <div class="filter-option">
+                        <input type="radio" name="rating" id="rating-all" value="" checked>
+                        <label for="rating-all">Все</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" name="rating" id="rating-4" value="4">
+                        <label for="rating-4">⭐ 4 и выше</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" name="rating" id="rating-4.5" value="4.5">
+                        <label for="rating-4.5">⭐ 4.5 и выше</label>
+                    </div>
+                </div>
+            </div>
+
+            <button class="apply-filters-btn" onclick="applyFilters()">Применить фильтры</button>
+            <button class="clear-filters" onclick="clearFilters()">Сбросить</button>
+        </aside>
+
+        <!-- Products -->
+        <main class="products-section">
+            <div class="products-header">
+                <span class="products-count" id="productsCount">Загрузка...</span>
+                <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+                    <option value="">Сортировка</option>
+                    <option value="price_asc">Сначала дешевые</option>
+                    <option value="price_desc">Сначала дорогие</option>
+                    <option value="rating">По рейтингу</option>
+                    <option value="newest">Новинки</option>
+                </select>
+            </div>
+
+            <div class="products-grid" id="productsGrid">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Загрузка букетов...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Load products on page load
+        document.addEventListener('DOMContentLoaded', loadProducts);
+
+        async function loadProducts() {
+            try {
+                const response = await fetch('/api/products');
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayProducts(data.data);
+                } else {
+                    showError('Ошибка загрузки товаров');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Ошибка подключения к серверу');
+            }
+        }
+
+        function displayProducts(products) {
+            const grid = document.getElementById('productsGrid');
+            const count = document.getElementById('productsCount');
+            
+            count.textContent = `Найдено ${products.length} букетов`;
+            
+            if (products.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <img src="/static/icons/3d/bouquet-teddy.png" alt="Пусто">
+                        <h3>Букеты не найдены</h3>
+                        <p>Попробуйте изменить параметры фильтрации</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = products.map(product => `
+                <div class="product-card" onclick="viewProduct(${product.id})">
+                    <div class="product-image">
+                        <img src="${product.image_url || '/static/images/hero-bouquet.jpg'}" alt="${product.name}">
+                        <span class="product-badge">${getSizeLabel(product.size)}</span>
+                        <div class="product-favorite" onclick="event.stopPropagation(); toggleFavorite(${product.id})">
+                            ♡
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-description">${product.description || 'Красивый букет'}</div>
+                        <div class="product-meta">
+                            <div class="product-rating">
+                                ⭐ ${product.rating.toFixed(1)} (${product.review_count})
+                            </div>
+                            <span class="product-seller">${product.seller.shop_name}</span>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price">${product.price} <span>сомони</span></div>
+                            <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})">
+                                В корзину
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getSizeLabel(size) {
+            const labels = {
+                'small': 'Маленький',
+                'medium': 'Средний',
+                'large': 'Большой'
+            };
+            return labels[size] || size;
+        }
+
+        function applyFilters() {
+            const occasions = Array.from(document.querySelectorAll('input[id^="occasion-"]:checked')).map(el => el.value);
+            const sizes = Array.from(document.querySelectorAll('input[id^="size-"]:checked')).map(el => el.value);
+            const minPrice = document.getElementById('minPrice').value;
+            const maxPrice = document.getElementById('maxPrice').value;
+            const rating = document.querySelector('input[name="rating"]:checked')?.value;
+            const sort = document.getElementById('sortSelect').value;
+
+            let url = '/api/products?';
+            if (occasions.length) url += `occasion=${occasions.join(',')}&`;
+            if (sizes.length) url += `size=${sizes.join(',')}&`;
+            if (minPrice) url += `min_price=${minPrice}&`;
+            if (maxPrice) url += `max_price=${maxPrice}&`;
+            if (rating) url += `min_rating=${rating}&`;
+            if (sort) url += `sort=${sort}&`;
+
+            fetch(url)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) displayProducts(data.data);
+                })
+                .catch(e => console.error(e));
+        }
+
+        function clearFilters() {
+            document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+            document.getElementById('rating-all').checked = true;
+            document.getElementById('minPrice').value = '';
+            document.getElementById('maxPrice').value = '';
+            document.getElementById('sortSelect').value = '';
+            loadProducts();
+        }
+
+        function viewProduct(productId) {
+            window.location.href = `/product/${productId}`;
+        }
+
+        function toggleFavorite(productId) {
+            alert('Добавлено в избранное!');
+        }
+
+        function addToCart(product) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItem = cart.find(item => item.id === product.id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image_url || '/static/images/hero-bouquet.jpg',
+                    size: product.size,
+                    seller: product.seller.shop_name,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert('Товар добавлен в корзину!');
+        }
+
+        function showError(message) {
+            document.getElementById('productsGrid').innerHTML = `
+                <div class="empty-state">
+                    <h3>Ошибка</h3>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+    </script>
+
+</body>
+</html>

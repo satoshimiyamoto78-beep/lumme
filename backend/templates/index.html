@@ -3,25 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumme - Маркетплейс цветов</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>Lumme - Маркетплейс цветов Таджикистана</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ========== ЦВЕТОВАЯ ПАЛИТРА LUMME ========== */
         :root {
-            --primary-dark: #203F9A;      /* Ярко синий */
-            --primary-light: #94C2DA;     /* Пастельный голубой */
-            --accent-pink: #E84797;       /* Ярко розовый */
-            --accent-light-pink: #E7A0CC; /* Пастельный розовый */
-            --neutral-light: #EFE8E0;     /* Светлый бежевый */
-            --secondary-blue: #4E7CB2;    /* Пастельный синий */
-            
-            --text-dark: #333333;
-            --text-light: #777777;
-            --bg-light: #FFFFFF;
-            --bg-very-light: #F9F7F5;
+            --primary: #E84797;
+            --primary-dark: #C73A7E;
+            --secondary: #203F9A;
+            --accent: #FFB6C1;
+            --text-dark: #1a1a2e;
+            --text-light: #6b7280;
+            --bg-light: #fafafa;
+            --bg-white: #ffffff;
+            --gradient-pink: linear-gradient(135deg, #E84797 0%, #FFB6C1 100%);
+            --gradient-blue: linear-gradient(135deg, #203F9A 0%, #4E7CB2 100%);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
         }
 
-        /* ========== ОБЩИЕ СТИЛИ ========== */
         * {
             margin: 0;
             padding: 0;
@@ -29,247 +34,477 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: var(--bg-very-light);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-light);
             color: var(--text-dark);
             line-height: 1.6;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* ========== ШАПКА САЙТА ========== */
-        header {
-            background-color: var(--bg-light);
-            border-bottom: 1px solid #f0f0f0;
-            padding: 20px 0;
-            position: sticky;
+        /* Navigation */
+        .navbar {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: fixed;
             top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
         }
 
-        .header-content {
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .logo {
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--accent-pink) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -1px;
-        }
-
-        nav {
             display: flex;
-            gap: 30px;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
         }
 
-        nav a {
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
             text-decoration: none;
             color: var(--text-dark);
             font-weight: 500;
             transition: color 0.3s;
+            position: relative;
         }
 
-        nav a:hover {
-            color: var(--accent-pink);
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
         }
 
-        .header-actions {
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .nav-actions {
             display: flex;
-            gap: 15px;
             align-items: center;
+            gap: 1rem;
         }
 
-        .cart-icon {
-            font-size: 24px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .cart-icon:hover {
-            transform: scale(1.1);
-        }
-
-        .login-btn {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-blue) 100%);
-            color: white;
-            padding: 10px 24px;
-            border-radius: 25px;
-            text-decoration: none;
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-sm);
             font-weight: 600;
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: none;
             cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .login-btn:hover {
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--gradient-pink);
+            border: none;
+            color: white;
+        }
+
+        .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(32, 63, 154, 0.3);
+            box-shadow: var(--shadow-md);
         }
 
-        /* ========== СЕКЦИЯ ГЕРОЙ ========== */
+        .cart-count {
+            background: var(--secondary);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Hero Section */
         .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 2rem 60px;
+            background: linear-gradient(135deg, #fff5f8 0%, #f0f4ff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(232,71,151,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 60px;
+            gap: 4rem;
             align-items: center;
-            padding: 80px 0;
         }
 
-        .hero-text h1 {
-            font-size: 52px;
-            line-height: 1.2;
-            margin-bottom: 20px;
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
             color: var(--text-dark);
         }
 
-        .hero-text h1 span {
-            background: linear-gradient(135deg, var(--accent-pink) 0%, var(--primary-dark) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .hero-title span {
+            color: var(--primary);
         }
 
-        .hero-text p {
-            font-size: 18px;
+        .hero-description {
+            font-size: 1.25rem;
             color: var(--text-light);
-            margin-bottom: 30px;
-            line-height: 1.8;
+            margin-bottom: 2rem;
+            max-width: 500px;
         }
 
-        .cta-button {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--accent-pink) 0%, #d1608a 100%);
-            color: white;
-            padding: 16px 40px;
-            border-radius: 30px;
-            text-decoration: none;
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .hero-btn {
+            padding: 1rem 2rem;
+            border-radius: var(--radius-sm);
             font-weight: 600;
-            font-size: 16px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: none;
+            font-size: 1.1rem;
             cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
         }
 
-        .cta-button:hover {
+        .hero-btn-primary {
+            background: var(--gradient-pink);
+            color: white;
+            border: none;
+        }
+
+        .hero-btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(232, 71, 151, 0.3);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero-btn-secondary {
+            background: white;
+            color: var(--text-dark);
+            border: 2px solid #e5e7eb;
+        }
+
+        .hero-btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
         }
 
         .hero-image {
             position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
         }
 
-        .hero-image img {
+        .hero-image-main {
             width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 20px;
+            max-width: 600px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
         }
 
-        /* ========== СЕКЦИЯ КАТАЛОГА ========== */
-        .catalog-section {
-            padding: 80px 0;
+        .hero-floating-card {
+            position: absolute;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
+        .hero-floating-card.top {
+            top: 10%;
+            right: -20px;
         }
 
-        .section-header h2 {
-            font-size: 42px;
-            margin-bottom: 15px;
-            color: var(--text-dark);
+        .hero-floating-card.bottom {
+            bottom: 15%;
+            left: -30px;
         }
 
-        .section-header p {
-            font-size: 18px;
+        .floating-icon {
+            width: 50px;
+            height: 50px;
+        }
+
+        .floating-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .floating-text h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .floating-text p {
+            font-size: 0.85rem;
             color: var(--text-light);
         }
 
-        /* ========== ФИЛЬТРЫ ========== */
-        .filters {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-            background-color: var(--bg-light);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        /* Features Section */
+        .features {
+            padding: 80px 2rem;
+            background: var(--bg-white);
         }
 
-        .filter-group {
-            display: flex;
-            gap: 10px;
-            align-items: center;
+        .features-container {
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
-        .filter-group label {
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .filter-group select,
-        .filter-group input {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-
-        .filter-group select:focus,
-        .filter-group input:focus {
-            outline: none;
-            border-color: var(--accent-pink);
-            box-shadow: 0 0 0 3px rgba(232, 71, 151, 0.1);
-        }
-
-        /* ========== СЕТКА ТОВАРОВ ========== */
-        .product-grid {
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: var(--radius-md);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            background: var(--bg-light);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .feature-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Categories Section */
+        .categories {
+            padding: 80px 2rem;
+            background: var(--bg-light);
+        }
+
+        .section-header {
+            max-width: 1400px;
+            margin: 0 auto 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .view-all-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .categories-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .category-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .category-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .category-card:hover .category-image img {
+            transform: scale(1.1);
+        }
+
+        .category-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .category-info h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Products Section */
+        .products {
+            padding: 80px 2rem;
+            background: var(--bg-white);
+        }
+
+        .products-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
         }
 
         .product-card {
-            background-color: var(--bg-light);
-            border-radius: 16px;
+            background: var(--bg-light);
+            border-radius: var(--radius-md);
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s;
             cursor: pointer;
-            display: flex;
-            flex-direction: column;
         }
 
         .product-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--shadow-md);
         }
 
         .product-image {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-light-pink) 100%);
             position: relative;
+            height: 280px;
             overflow: hidden;
         }
 
@@ -277,392 +512,974 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
         }
 
         .product-badge {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            background-color: var(--accent-pink);
+            top: 1rem;
+            left: 1rem;
+            background: var(--primary);
             color: white;
-            padding: 6px 12px;
+            padding: 0.5rem 1rem;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 0.8rem;
             font-weight: 600;
+        }
+
+        .product-favorite {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
+            border: none;
+            font-size: 1.25rem;
+        }
+
+        .product-favorite:hover {
+            background: var(--primary);
+            color: white;
         }
 
         .product-info {
-            padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
+            padding: 1.5rem;
         }
 
         .product-name {
-            font-size: 18px;
             font-weight: 600;
-            margin-bottom: 8px;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
             color: var(--text-dark);
         }
 
-        .product-description {
-            font-size: 14px;
+        .product-seller {
             color: var(--text-light);
-            margin-bottom: 12px;
-            flex-grow: 1;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
         }
 
         .product-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
-            font-size: 13px;
-            color: var(--text-light);
+            margin-bottom: 1rem;
         }
 
         .product-rating {
             display: flex;
-            gap: 4px;
             align-items: center;
-        }
-
-        .star {
-            color: #FFD700;
-            font-size: 14px;
+            gap: 0.25rem;
+            color: #fbbf24;
+            font-size: 0.9rem;
         }
 
         .product-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 12px;
-            border-top: 1px solid #f0f0f0;
         }
 
         .product-price {
-            font-size: 22px;
+            font-size: 1.5rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--accent-pink) 0%, var(--primary-dark) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary);
         }
 
-        .add-to-cart-btn {
-            background-color: var(--primary-dark);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: background-color 0.3s;
-        }
-
-        .add-to-cart-btn:hover {
-            background-color: var(--secondary-blue);
-        }
-
-        /* ========== ПОДВАЛ ========== */
-        footer {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-blue) 100%);
-            color: white;
-            padding: 60px 0 20px;
-            margin-top: 80px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-section h3 {
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-
-        .footer-section a {
-            display: block;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            margin-bottom: 10px;
-            transition: color 0.3s;
-        }
-
-        .footer-section a:hover {
-            color: white;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        /* ========== АДАПТИВНОСТЬ ========== */
-        @media (max-width: 768px) {
-            .hero {
-                grid-template-columns: 1fr;
-                padding: 40px 0;
-            }
-
-            .hero-text h1 {
-                font-size: 36px;
-            }
-
-            nav {
-                display: none;
-            }
-
-            .product-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 20px;
-            }
-
-            .footer-content {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-
-            .filters {
-                flex-direction: column;
-            }
-        }
-
-        /* ========== ЗАГРУЗКА ========== */
-        .loading {
-            text-align: center;
-            padding: 40px;
-            font-size: 18px;
+        .product-price span {
+            font-size: 0.85rem;
+            font-weight: 400;
             color: var(--text-light);
         }
 
-        .spinner {
-            border: 4px solid var(--primary-light);
-            border-top: 4px solid var(--accent-pink);
+        .add-to-cart {
+            padding: 0.75rem 1.25rem;
+            background: var(--gradient-pink);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart:hover {
+            transform: scale(1.05);
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 80px 2rem;
+            background: linear-gradient(135deg, #fff5f8 0%, #f0f4ff 100%);
+        }
+
+        .how-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .how-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .how-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .how-step {
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-pink);
+            color: white;
             border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+        }
+
+        .how-step h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .how-step p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Sellers Section */
+        .sellers {
+            padding: 80px 2rem;
+            background: var(--bg-white);
+        }
+
+        .sellers-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sellers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .sellers-image {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .sellers-image img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
+
+        .sellers-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sellers-content p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sellers-benefits {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .sellers-benefits li {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .sellers-benefits li::before {
+            content: '✓';
+            width: 30px;
+            height: 30px;
+            background: var(--accent);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .sellers-btn {
+            padding: 1rem 2rem;
+            background: var(--gradient-blue);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .sellers-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 2rem;
+            background: var(--bg-light);
+        }
+
+        .testimonials-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .testimonials-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            text-align: left;
+        }
+
+        .testimonial-stars {
+            color: #fbbf24;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-text {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-pink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .author-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .author-info p {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 100px 2rem;
+            background: var(--gradient-pink);
+            text-align: center;
+            color: white;
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .cta-btn {
+            padding: 1rem 3rem;
+            background: white;
+            color: var(--primary);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 60px 2rem 30px;
+        }
+
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .footer-brand p {
+            color: #9ca3af;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
             width: 40px;
             height: 40px;
+            background: #374151;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+        }
+
+        .footer-column h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-column a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 40px auto 0;
+            padding-top: 30px;
+            border-top: 1px solid #374151;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #9ca3af;
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .payment-method {
+            background: #374151;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-light);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e5e7eb;
+            border-top-color: var(--primary);
+            border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 20px auto;
+            margin: 0 auto 1rem;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content {
+                order: 2;
+            }
+
+            .hero-image {
+                order: 1;
+            }
+
+            .hero-description {
+                margin: 0 auto 2rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .features-grid,
+            .categories-grid,
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .how-steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .sellers-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-floating-card {
+                display: none;
+            }
+
+            .features-grid,
+            .categories-grid,
+            .products-grid,
+            .how-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- ========== ШАПКА ========== -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">🌸 Lumme</div>
-                <nav>
-                    <a href="#catalog">Каталог</a>
-                    <a href="#about">О нас</a>
-                    <a href="#contact">Контакты</a>
-                </nav>
-                <div class="header-actions">
-                    <span class="cart-icon" onclick="toggleCart()">🛒</span>
-                    <button class="login-btn" onclick="openLogin()">Войти</button>
-                </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                🌸 Lumme
+            </a>
+            <ul class="nav-links">
+                <li><a href="/" class="active">Главная</a></li>
+                <li><a href="/catalog">Каталог</a></li>
+                <li><a href="/about">О нас</a></li>
+                <li><a href="/contacts">Контакты</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="/cart" class="nav-btn btn-outline">
+                    🛒 Корзина
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <a href="/auth" class="nav-btn btn-primary" id="authBtn">Войти</a>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <!-- ========== ГЕРОЙ СЕКЦИЯ ========== -->
+    <!-- Hero Section -->
     <section class="hero">
-        <div class="container" style="grid-column: 1;">
-            <div class="hero-text">
-                <h1>Красивые букеты от лучших <span>флористов</span> Таджикистана</h1>
-                <p>Найдите идеальный букет для любого повода. Быстрая доставка, свежие цветы и персональное обслуживание.</p>
-                <button class="cta-button" onclick="scrollToCatalog()">Смотреть каталог →</button>
-            </div>
-        </div>
-        <div class="hero-image">
-            <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=500&h=500&fit=crop" alt="Красивый букет роз">
-        </div>
-    </section>
-
-    <!-- ========== КАТАЛОГ ТОВАРОВ ========== -->
-    <section class="catalog-section" id="catalog">
-        <div class="container">
-            <div class="section-header">
-                <h2>Популярные букеты</h2>
-                <p>Выберите идеальный букет для вашего особого момента</p>
-            </div>
-
-            <!-- ФИЛЬТРЫ -->
-            <div class="filters">
-                <div class="filter-group">
-                    <label>Повод:</label>
-                    <select id="occasionFilter" onchange="filterProducts()">
-                        <option value="">Все</option>
-                        <option value="birthday">День рождения</option>
-                        <option value="wedding">Свадьба</option>
-                        <option value="anniversary">Юбилей</option>
-                        <option value="congratulations">Поздравление</option>
-                    </select>
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    🌟 Более 50 флористов по всему Таджикистану
                 </div>
-
-                <div class="filter-group">
-                    <label>Размер:</label>
-                    <select id="sizeFilter" onchange="filterProducts()">
-                        <option value="">Все</option>
-                        <option value="small">Маленький</option>
-                        <option value="medium">Средний</option>
-                        <option value="large">Большой</option>
-                    </select>
+                <h1 class="hero-title">
+                    Свежие цветы <span>с доставкой</span> к вашей двери
+                </h1>
+                <p class="hero-description">
+                    Lumme — первый маркетплейс цветов в Таджикистане. Выбирайте букеты от лучших флористов и получайте их в течение 2 часов.
+                </p>
+                <div class="hero-buttons">
+                    <a href="/catalog" class="hero-btn hero-btn-primary">Выбрать букет</a>
+                    <a href="/about" class="hero-btn hero-btn-secondary">Узнать больше</a>
                 </div>
-
-                <div class="filter-group">
-                    <label>Цена:</label>
-                    <input type="number" id="minPrice" placeholder="От" onchange="filterProducts()" style="width: 80px;">
-                    <input type="number" id="maxPrice" placeholder="До" onchange="filterProducts()" style="width: 80px;">
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">Флористов</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">5000+</div>
+                        <div class="stat-label">Доставок</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4.9</div>
+                        <div class="stat-label">Рейтинг</div>
+                    </div>
                 </div>
             </div>
-
-            <!-- СЕТКА ТОВАРОВ -->
-            <div id="productGrid" class="product-grid">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Загрузка товаров...</p>
+            <div class="hero-image">
+                <img src="/static/images/hero-bouquet.jpg" alt="Красивый букет" class="hero-image-main">
+                <div class="hero-floating-card top">
+                    <div class="floating-icon">
+                        <img src="/static/icons/3d/gift-bouquet.png" alt="Подарок">
+                    </div>
+                    <div class="floating-text">
+                        <h4>Быстрая доставка</h4>
+                        <p>За 2-4 часа</p>
+                    </div>
+                </div>
+                <div class="hero-floating-card bottom">
+                    <div class="floating-icon">
+                        <img src="/static/icons/3d/heart-gift.png" alt="Любовь">
+                    </div>
+                    <div class="floating-text">
+                        <h4>1000+ клиентов</h4>
+                        <p>Довольны покупкой</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ========== ПОДВАЛ ========== -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>О Lumme</h3>
-                    <a href="#">О компании</a>
-                    <a href="#">Наша миссия</a>
-                    <a href="#">Блог</a>
+    <!-- Features Section -->
+    <section class="features">
+        <div class="features-container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <img src="/static/icons/3d/bouquet-balloons.png" alt="Свежесть">
+                    </div>
+                    <h3>Свежие цветы</h3>
+                    <p>Только свежие цветы от проверенных поставщиков</p>
                 </div>
-                <div class="footer-section">
-                    <h3>Для покупателей</h3>
-                    <a href="#">Как заказать</a>
-                    <a href="#">Доставка</a>
-                    <a href="#">Возврат</a>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <img src="/static/icons/3d/gift-flower.png" alt="Доставка">
+                    </div>
+                    <h3>Быстрая доставка</h3>
+                    <p>Доставим букет за 2-4 часа по Душанбе</p>
                 </div>
-                <div class="footer-section">
-                    <h3>Для продавцов</h3>
-                    <a href="#">Присоединиться</a>
-                    <a href="#">Условия</a>
-                    <a href="#">Поддержка</a>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <img src="/static/icons/3d/bouquet-teddy.png" alt="Качество">
+                    </div>
+                    <h3>Гарантия качества</h3>
+                    <p>Вернем деньги, если букет не понравится</p>
                 </div>
-                <div class="footer-section">
-                    <h3>Контакты</h3>
-                    <a href="tel:+992">+992 (37) 227-00-00</a>
-                    <a href="mailto:info@lumme.tj">info@lumme.tj</a>
-                    <a href="#">Telegram</a>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <img src="/static/icons/3d/teddy-flowers.png" alt="Подарки">
+                    </div>
+                    <h3>Подарки в комплекте</h3>
+                    <p>Добавьте мишку, шоколад или открытку</p>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Lumme. Все права защищены. | <a href="#" style="color: rgba(255,255,255,0.8);">Политика конфиденциальности</a></p>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Категории букетов</h2>
+                <p class="section-subtitle">Выберите букет для любого повода</p>
+            </div>
+            <a href="/catalog" class="view-all-link">Все категории →</a>
+        </div>
+        <div class="categories-grid">
+            <a href="/catalog?occasion=birthday" class="category-card">
+                <div class="category-image">
+                    <img src="/static/images/florist-blonde.jpg" alt="День рождения">
+                </div>
+                <div class="category-info">
+                    <h3>День рождения</h3>
+                    <p>Яркие букеты для праздника</p>
+                </div>
+            </a>
+            <a href="/catalog?occasion=wedding" class="category-card">
+                <div class="category-image">
+                    <img src="/static/images/florist-chrysanthemum.jpg" alt="Свадьба">
+                </div>
+                <div class="category-info">
+                    <h3>Свадьба</h3>
+                    <p>Элегантные композиции</p>
+                </div>
+            </a>
+            <a href="/catalog?occasion=love" class="category-card">
+                <div class="category-image">
+                    <img src="/static/images/florists-team.jpg" alt="Любовь">
+                </div>
+                <div class="category-info">
+                    <h3>Признание в любви</h3>
+                    <p>Романтические букеты</p>
+                </div>
+            </a>
+            <a href="/catalog?occasion=congratulations" class="category-card">
+                <div class="category-image">
+                    <img src="/static/images/florist-shop.jpg" alt="Поздравление">
+                </div>
+                <div class="category-info">
+                    <h3>Поздравление</h3>
+                    <p>Для любого события</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Популярные букеты</h2>
+                <p class="section-subtitle">Самые любимые букеты наших клиентов</p>
+            </div>
+            <a href="/catalog" class="view-all-link">Все букеты →</a>
+        </div>
+        <div class="products-grid" id="productsGrid">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Загрузка букетов...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="how-container">
+            <h2 class="how-title">Как это работает</h2>
+            <div class="how-steps">
+                <div class="how-step">
+                    <div class="step-number">1</div>
+                    <h3>Выберите букет</h3>
+                    <p>Просмотрите каталог и найдите идеальный букет</p>
+                </div>
+                <div class="how-step">
+                    <div class="step-number">2</div>
+                    <h3>Оформите заказ</h3>
+                    <p>Добавьте в корзину и укажите адрес доставки</p>
+                </div>
+                <div class="how-step">
+                    <div class="step-number">3</div>
+                    <h3>Оплатите онлайн</h3>
+                    <p>Безопасная оплата картой или при получении</p>
+                </div>
+                <div class="how-step">
+                    <div class="step-number">4</div>
+                    <h3>Получите букет</h3>
+                    <p>Курьер доставит свежий букет за 2-4 часа</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sellers Section -->
+    <section class="sellers">
+        <div class="sellers-container">
+            <div class="sellers-grid">
+                <div class="sellers-image">
+                    <img src="/static/images/florist-online.jpg" alt="Стать продавцом">
+                </div>
+                <div class="sellers-content">
+                    <h2>Станьте продавцом на Lumme</h2>
+                    <p>Присоединяйтесь к сообществу флористов Таджикистана и получайте новых клиентов каждый день.</p>
+                    <ul class="sellers-benefits">
+                        <li>Бесплатная регистрация и размещение</li>
+                        <li>Тысячи потенциальных клиентов</li>
+                        <li>Удобная панель управления заказами</li>
+                        <li>Быстрые выплаты на карту</li>
+                    </ul>
+                    <a href="/auth" class="sellers-btn">Начать продавать</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="testimonials-container">
+            <h2 class="testimonials-title">Отзывы наших клиентов</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Заказывала букет для мамы на день рождения. Доставили вовремя, цветы свежие и очень красивые. Мама была в восторге!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">М</div>
+                        <div class="author-info">
+                            <h4>Мадина К.</h4>
+                            <p>Душанбе</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Отличный сервис! Заказал букет для жены, курьер приехал даже раньше назначенного времени. Рекомендую всем!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">Ф</div>
+                        <div class="author-info">
+                            <h4>Фарход Р.</h4>
+                            <p>Душанбе</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Как флорист, я рада работать с Lumme. Удобная платформа, много заказов, быстрые выплаты. Лучший маркетплейс!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">А</div>
+                        <div class="author-info">
+                            <h4>Анна С.</h4>
+                            <p>Флорист</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-container">
+            <h2>Готовы порадовать близких?</h2>
+            <p>Выберите идеальный букет из нашего каталога и закажите доставку прямо сейчас</p>
+            <a href="/catalog" class="cta-btn">Выбрать букет</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>🌸 Lumme</h3>
+                <p>Маркетплейс цветов Таджикистана. Свежие букеты от лучших флористов с доставкой по всей стране.</p>
+                <div class="social-links">
+                    <a href="https://t.me/lumme_tj" class="social-link">📱</a>
+                    <a href="https://instagram.com/lumme_tj" class="social-link">📷</a>
+                    <a href="https://facebook.com/lumme_tj" class="social-link">📘</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h4>Покупателям</h4>
+                <ul>
+                    <li><a href="/catalog">Каталог</a></li>
+                    <li><a href="/about">О нас</a></li>
+                    <li><a href="/contacts">Контакты</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Продавцам</h4>
+                <ul>
+                    <li><a href="/auth">Стать продавцом</a></li>
+                    <li><a href="/seller-guide">Руководство</a></li>
+                    <li><a href="/pricing">Тарифы</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Контакты</h4>
+                <ul>
+                    <li><a href="tel:+992372270000">+992 (37) 227-00-00</a></li>
+                    <li><a href="mailto:info@lumme.tj">info@lumme.tj</a></li>
+                    <li><a href="https://t.me/lumme_tj">Telegram</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Lumme. Все права защищены.</p>
+            <div class="payment-methods">
+                <span class="payment-method">💳 Visa</span>
+                <span class="payment-method">💳 MasterCard</span>
+                <span class="payment-method">💵 Наличные</span>
             </div>
         </div>
     </footer>
 
-    <!-- ========== JAVASCRIPT ========== -->
     <script>
-        // Инициализация Telegram Web App
-        window.Telegram.WebApp.ready();
-        const tg = window.Telegram.WebApp;
-
-        // Получение данных пользователя из Telegram
-        const user = tg.initDataUnsafe.user;
-        if (user) {
-            console.log('Пользователь Telegram:', user);
+        // Update cart count
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
         }
 
-        // Загрузка товаров с API
+        // Check auth status
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            const authBtn = document.getElementById('authBtn');
+            
+            if (token && user.name) {
+                authBtn.textContent = user.name;
+                authBtn.href = '/profile';
+            }
+        }
+
+        // Load products
         async function loadProducts() {
             try {
-                const response = await fetch('/api/products');
+                const response = await fetch('/api/products?limit=8');
                 const data = await response.json();
-
+                
                 if (data.success) {
                     displayProducts(data.data);
-                } else {
-                    showError('Ошибка загрузки товаров');
                 }
             } catch (error) {
-                console.error('Ошибка:', error);
-                showError('Не удалось подключиться к серверу');
+                console.error('Error:', error);
+                document.getElementById('productsGrid').innerHTML = '<p>Ошибка загрузки товаров</p>';
             }
         }
 
-        // Отображение товаров
         function displayProducts(products) {
-            const grid = document.getElementById('productGrid');
+            const grid = document.getElementById('productsGrid');
             
-            if (products.length === 0) {
-                grid.innerHTML = '<div class="loading"><p>Товары не найдены</p></div>';
-                return;
-            }
-
             grid.innerHTML = products.map(product => `
-                <div class="product-card" onclick="viewProduct(${product.id})">
+                <div class="product-card" onclick="window.location.href='/product/${product.id}'">
                     <div class="product-image">
-                        <img src="${product.image_url || 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=500&h=500&fit=crop'}" alt="${product.name}">
-                        <span class="product-badge">${product.size}</span>
+                        <img src="${product.image_url || '/static/images/hero-bouquet.jpg'}" alt="${product.name}">
+                        <span class="product-badge">${getSizeLabel(product.size)}</span>
+                        <button class="product-favorite" onclick="event.stopPropagation(); toggleFavorite(${product.id})">♡</button>
                     </div>
                     <div class="product-info">
                         <div class="product-name">${product.name}</div>
-                        <div class="product-description">${product.description || 'Красивый букет'}</div>
+                        <div class="product-seller">${product.seller.shop_name}</div>
                         <div class="product-meta">
-                            <div class="product-rating">
-                                <span class="star">★</span>
-                                <span>${product.rating.toFixed(1)}</span>
-                                <span>(${product.review_count})</span>
-                            </div>
-                            <span>${product.seller.shop_name}</span>
+                            <div class="product-rating">⭐ ${product.rating.toFixed(1)}</div>
                         </div>
                         <div class="product-footer">
-                            <div class="product-price">${product.price} сомони</div>
-                            <button class="add-to-cart-btn" onclick="addToCart(event, ${JSON.stringify(product).replace(/"/g, '&quot;')})">В корзину</button>
+                            <div class="product-price">${product.price} <span>сомони</span></div>
+                            <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})">
+                                В корзину
+                            </button>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Фильтрация товаров
-        function filterProducts() {
-            const occasion = document.getElementById('occasionFilter').value;
-            const size = document.getElementById('sizeFilter').value;
-            const minPrice = document.getElementById('minPrice').value;
-            const maxPrice = document.getElementById('maxPrice').value;
-
-            let url = '/api/products?';
-            if (occasion) url += `occasion=${occasion}&`;
-            if (size) url += `size=${size}&`;
-            if (minPrice) url += `min_price=${minPrice}&`;
-            if (maxPrice) url += `max_price=${maxPrice}`;
-
-            fetch(url)
-                .then(r => r.json())
-                .then(data => {
-                    if (data.success) displayProducts(data.data);
-                })
-                .catch(e => console.error(e));
+        function getSizeLabel(size) {
+            const labels = { 'small': 'S', 'medium': 'M', 'large': 'L' };
+            return labels[size] || size;
         }
 
-        // Добавление в корзину
-        function addToCart(event, product) {
-            event.stopPropagation();
+        function toggleFavorite(productId) {
+            alert('Добавлено в избранное!');
+        }
+
+        function addToCart(product) {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const existingItem = cart.find(item => item.id === product.id);
             
@@ -673,7 +1490,7 @@
                     id: product.id,
                     name: product.name,
                     price: product.price,
-                    image: product.image_url || 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=500&h=500&fit=crop',
+                    image: product.image_url || '/static/images/hero-bouquet.jpg',
                     size: product.size,
                     seller: product.seller.shop_name,
                     quantity: 1
@@ -681,38 +1498,16 @@
             }
             
             localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
             alert('Товар добавлен в корзину!');
         }
 
-        // Просмотр товара
-        function viewProduct(productId) {
-            alert(`Открыть товар ${productId}`);
-            // TODO: Открыть страницу товара
-        }
-
-        // Переключение корзины
-        function toggleCart() {
-            window.location.href = '/cart';
-        }
-
-        // Открытие входа
-        function openLogin() {
-            window.location.href = '/auth';
-        }
-
-        // Прокрутка к каталогу
-        function scrollToCatalog() {
-            document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Показ ошибки
-        function showError(message) {
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = `<div class="loading"><p style="color: red;">${message}</p></div>`;
-        }
-
-        // Загрузка товаров при загрузке страницы
-        window.addEventListener('load', loadProducts);
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartCount();
+            checkAuth();
+            loadProducts();
+        });
     </script>
 
 </body>
